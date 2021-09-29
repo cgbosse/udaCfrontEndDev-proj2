@@ -51,11 +51,14 @@ let navMenuCreation = function() {
         let menuItemText ="";
         menuItemText = sec.getAttribute("data-nav");
         
-        //Create the anchor links to each section
+        //Create the anchor links to each section and create a target attribute
         anchor.innerText = menuItemText;
-        anchor.setAttribute('href',("#" + menuItemID));
+        anchor.setAttribute('href',("#" + menuItemID));     
         console.log(anchor);
                         
+        //Assign special class for later retrieval
+        anchor.className = 'menu__link';
+
         //Append the anchor to the menuItem "li" element
         menuItem.appendChild(anchor);
 
@@ -131,31 +134,77 @@ for (let navSection of navSections) {
 // Scroll to anchor ID using scrollTO event
 
 
-    function smoothScroll(clickedAnchor) {
-        document.getElementById(clickedAnchor.id).scrollIntoView({behavior: "smooth"});
+//Adding an event listener to all the menu_link anchors.
+
+
+function menuLinkListener() {
+    let menuLinks = document.querySelectorAll(".menu__link");
+
+    for (const menuLink of menuLinks) {
+        console.log("adding listener");
+        menuLink.addEventListener('click', function(event) {
+            smoothScroll(event);        
+        });
     };
+};
+
+function smoothScroll(event) {
+
+    // Stop the default link behaviour, the anchor's default scroll
+    event.preventDefault();
+
+    // Function to establish the clicked anchor target's distance to scroll to
+    let hrefString = " ";
+
+    // !!!!!! Must put exception when event.target = null
+        hrefString = event.target.getAttribute('href');
+
+        //Delete the # character to select the element by id
+        hrefString = hrefString.slice(1);
+        console.log(hrefString);
+
+
+        // Get the starting position
+
+        let startingPosition = document.getElementById('section1').getBoundingClientRect().top;
+        console.log(startingPosition);
+
+        // Get the destination section's distance in pixels using ELEMENT.getBoundingClientRect()
     
+        let sectionDistance = document.getElementById(hrefString).getBoundingClientRect().top - startingPosition;
+        console.log(sectionDistance);
 
+        // Scroll to the section using window.scrollTo(x,y) using behaviour:smooth
+        window.scrollTo({
+            top: sectionDistance,
+            left: 0,
+            behavior: 'smooth'
+        });
 
-
-
+   };
 
 /**
  * End Main Functions
  * Begin Events
- * 
-*/
+ */ 
 
 // Build menu 
+window.addEventListener('DOMContentLoaded', (event) => {
+    navMenuCreation();
+    menuLinkListener();
+});
 
 // Scroll to section on link click
 
-// Set sections as active
+
+
+    // Set sections as active
+    window.addEventListener('scroll', function(event) {
+       activeView();
+    });
+
 
 //CB: Event Listener on scroll of the viewport.
     
-visualViewPort.addEventListener('scroll',function(){
-
-});
-
+//visualViewPort.addEventListener('scroll', activeView());
 
