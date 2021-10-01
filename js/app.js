@@ -64,11 +64,12 @@ let navMenuCreation = function() {
 
         //Append the menuItems to the document fragment "navMenuHtml"
         navMenuHtml.append(menuItem); 
-
-        //Append the document fragment to the NavBar
-
     });
+    //Append the document fragment to the NavBar
     navBar.appendChild(navMenuHtml);
+    
+    //Adding the default active link of the visible section 1
+    document.querySelectorAll('.menu__link')[0].classList.add('active');
 };
 
 
